@@ -1,20 +1,50 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Entity
+@Table(name = "project")
 public class Project {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "duration")
     private int duration;
-    private List<Employee> employeeList;
+
+    @ManyToMany
+    @JsonIgnoreProperties({"projects"})
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinTable(
+            name = "employees_projects",
+            joinColumns = { @JoinColumn(
+                    name = "project_id",
+                    nullable = false,
+                    updatable = false)
+            },
+            inverseJoinColumns = {@JoinColumn(
+                    name = "employee_id",
+                    nullable = false,
+                    updatable = false)
+            }
+    )
+    private List<Employee> employees;
 
     public Project(Long id, String name, int duration) {
         this.id = id;
         this.name = name;
         this.duration = duration;
-        this.employeeList = new ArrayList<>();
+        this.employees = new ArrayList<>();
     }
 
     public Project() {
@@ -44,11 +74,11 @@ public class Project {
         this.duration = duration;
     }
 
-    public List<Employee> getEmployeeList() {
-        return employeeList;
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
-        this.employeeList = employeeList;
+    public void setEmployees(List<Employee> employeeList) {
+        this.employees = employeeList;
     }
 }
