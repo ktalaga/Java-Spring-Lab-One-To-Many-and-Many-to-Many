@@ -40,7 +40,7 @@ public class Project {
     )
     private List<Employee> employees;
 
-    public Project(Long id, String name, int duration) {
+    public Project(String name, int duration) {
         this.id = id;
         this.name = name;
         this.duration = duration;
@@ -80,5 +80,9 @@ public class Project {
 
     public void setEmployees(List<Employee> employeeList) {
         this.employees = employeeList;
+    }
+
+    public void addEmployee(Employee employee){
+        this.employees.add(employee);
     }
 }
